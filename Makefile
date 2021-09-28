@@ -5,7 +5,7 @@ RESOURCES=firefox.icns
 SLF=/System/Library/Frameworks
 FRAMEWORKS=${SLF}/Foundation
 
-build: clean all firefox install
+build: clean all prep firefox install
 
 prep:
 	git clone https://github.com/mszoek/airyx.git
