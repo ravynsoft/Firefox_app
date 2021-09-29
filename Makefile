@@ -9,6 +9,7 @@ build: clean all prep firefox install
 
 prep:
 	git clone https://github.com/mszoek/airyx.git
+	mv /usr/ports /usr/ports.old
 	${MAKE} -C airyx getports
 
 firefox:
