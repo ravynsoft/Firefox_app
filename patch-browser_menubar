@@ -1,0 +1,99 @@
+--- browser/base/content/browser-menubar.inc.orig	2021-09-30 16:36:58.277285000 -0400
++++ browser/base/content/browser-menubar.inc	2021-09-30 16:52:17.536669000 -0400
+@@ -17,6 +17,32 @@
+                                                     event.target.parentNode.openedWithKey);"
+ #endif
+                 >
++            <menu id="app-menu" data-l10n-id="menu-app">
++              <menupopup id="menu_AppPopup">
++                <menuitem id="aboutName"
++                          oncommand="openAboutDialog();"
++                          data-l10n-id="menu-about"
++                          appmenu-data-l10n-id="appmenu-about"/>
++#ifdef XP_UNIX
++#ifndef XP_MACOSX
++                <menuseparator/>
++                <menuitem id="menu_preferences"
++                          oncommand="openPreferences(undefined);"
++                          data-l10n-id="menu-application-preferences"
++                          />
++#endif
++#endif
++                <menuseparator/>
++                <menuitem id="menu_FileQuitItem"
++#if 1
++                          data-l10n-id="menu-quit-mac"
++#else
++                          data-l10n-id="menu-quit"
++#endif
++                          key="key_quitApplication"
++                          command="cmd_quitApplication"/>
++              </menupopup>
++            </menu>
+             <menu id="file-menu" data-l10n-id="menu-file">
+               <menupopup id="menu_FilePopup"
+                          onpopupshowing="gFileMenu.onPopupShowing(event);">
+@@ -84,14 +110,6 @@
+                 <menuitem id="goOfflineMenuitem"
+                           type="checkbox"
+                           command="cmd_toggleOfflineStatus" data-l10n-id="menu-file-go-offline"/>
+-                <menuitem id="menu_FileQuitItem"
+-#ifdef XP_MACOSX
+-                          data-l10n-id="menu-quit-mac"
+-#else
+-                          data-l10n-id="menu-quit"
+-#endif
+-                          key="key_quitApplication"
+-                          command="cmd_quitApplication"/>
+               </menupopup>
+             </menu>
+ 
+@@ -135,15 +153,6 @@
+                           command="cmd_switchTextDirection"
+                           key="key_switchTextDirection"
+                           hidden="true" data-l10n-id="menu-edit-bidi-switch-text-direction"/>
+-#ifdef XP_UNIX
+-#ifndef XP_MACOSX
+-                <menuseparator/>
+-                <menuitem id="menu_preferences"
+-                          oncommand="openPreferences(undefined);"
+-                          data-l10n-id="menu-settings"
+-                          />
+-#endif
+-#endif
+               </menupopup>
+             </menu>
+ 
+@@ -507,10 +516,6 @@
+                           appmenu-data-l10n-id="appmenu-help-not-deceptive"
+                           hidden="true"/>
+                 <menuseparator id="aboutSeparator"/>
+-                <menuitem id="aboutName"
+-                          oncommand="openAboutDialog();"
+-                          data-l10n-id="menu-about"
+-                          appmenu-data-l10n-id="appmenu-about"/>
+                 <menuseparator id="helpPolicySeparator"
+                           hidden="true"/>
+                 <menuitem id="helpPolicySupport"
+--- browser/locales/en-US/browser/menubar.ftl.orig	2021-09-30 19:46:35.634429000 -0400
++++ browser/locales/en-US/browser/menubar.ftl	2021-09-30 19:59:36.717753000 -0400
+@@ -54,6 +54,10 @@
+     .label = About { -brand-shorter-name }
+     .accesskey = A
+ 
++## App Menu
++menu-app =
++    .label = !{ -brand-shorter-name }
++
+ ## File Menu
+ 
+ menu-file =
+@@ -273,7 +277,7 @@
+     .label = Page Info
+     .accesskey = I
+ menu-settings =
+-    .label = Settings
++    .label = Preferences
+     .accesskey =
+         { PLATFORM() ->
+             [windows] S

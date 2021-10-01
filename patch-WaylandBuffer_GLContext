@@ -1,0 +1,11 @@
+--- widget/gtk/WaylandBuffer.cpp.orig	2021-09-30 11:23:21.487223000 -0400
++++ widget/gtk/WaylandBuffer.cpp	2021-09-30 11:18:47.140653000 -0400
+@@ -259,7 +259,7 @@
+ 
+ /* static */
+ RefPtr<WaylandBufferDMABUF> WaylandBufferDMABUF::Create(
+-    const LayoutDeviceIntSize& aSize, GLContext* aGL) {
++    const LayoutDeviceIntSize& aSize, gl::GLContext* aGL) {
+   RefPtr<WaylandBufferDMABUF> buffer = new WaylandBufferDMABUF(aSize);
+ 
+   const auto flags =

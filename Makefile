@@ -5,7 +5,12 @@ RESOURCES=firefox.icns
 SLF=/System/Library/Frameworks
 FRAMEWORKS=${SLF}/Foundation
 
-build: clean all prep firefox install
+UID!= id -u
+.if ${UID} > 0
+SUDO= sudo
+.endif
+
+build: clean all firefox install
 
 prep:
 	git clone https://github.com/mszoek/airyx.git
@@ -13,8 +18,9 @@ prep:
 	${MAKE} -C airyx getports
 
 firefox:
-	${SUDO} cp -f patch-unity_menubar /usr/ports/www/firefox/files/
-	${SUDO} ${MAKE} -C /usr/ports/www/firefox build
+	${SUDO} cp -f patch-* /usr/ports/www/firefox/files/
+	${SUDO} mkdir -p /usr/ports/www/firefox/work/stage/usr/share/applications
+	${SUDO} ${MAKE} -C /usr/ports/www/firefox build stage
 
 install:
 	cp -a /usr/ports/www/firefox/work/stage/* ./${APP_DIR}/Contents/Resources/
