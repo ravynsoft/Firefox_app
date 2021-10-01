@@ -19,7 +19,7 @@ prep:
 
 firefox:
 	${SUDO} cp -f patch-* /usr/ports/www/firefox/files/
-	${SUDO} mkdir -p /usr/ports/www/firefox/work/stage/usr/share/applications
+	${SUDO} sed -i_ '/^post-install:/,+3d' /usr/ports/www/firefox/Makefile
 	${SUDO} ${MAKE} -C /usr/ports/www/firefox build stage
 
 install:
