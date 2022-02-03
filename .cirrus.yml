@@ -11,11 +11,16 @@ build_task:
   environment:
     PKG_CONFIG_PATH: /usr/libdata/pkgconfig:/usr/local/libdata/pkgconfig
   script:
-    - pkg-static install -fy pkg && pkg update
-    - pkg install -y cmake jpeg-turbo openjpeg tiff png cairo fontconfig freetype2 libX11 libXext libXfixes libXdamage mesa-libs dbus pkgconf libqtxdg sqlite3 git-tiny qt5-buildtools qt5-qmake qt5-dbus qt5-linguisttools qt5-widgets qt5-x11extras qt5-dbus glib dbus-glib libffi libfm libfm-qt menu-cache gettext-runtime icu kf5-extra-cmake-modules lxqt-build-tools kf5-ki18n kf5-plasma-framework kf5-ktexteditor qt5-testlib gmake autoconf zip bash nasm yasm autoconf213 llvm13 rust rust-cbindgen sndio node jackit libXres py38-sqlite3 v4l_compat binutils nss libvpx libnotify p5-Locale-gettext aom dav1d webp libpci ffmpeg libiconv
+    - rm -f /etc/pkg/FreeBSD.conf /usr/local/etc/pkg.conf
+    - /usr/local/sbin/pkg-static install -fy pkg && /usr/sbin/pkg update
+    - /usr/sbin/pkg install -fy cmake jpeg-turbo openjpeg tiff png cairo fontconfig freetype2 libX11 libXext libXfixes libXdamage mesa-libs dbus pkgconf libqtxdg sqlite3 git-tiny qt5-buildtools qt5-qmake qt5-dbus qt5-linguisttools qt5-widgets qt5-x11extras qt5-dbus glib dbus-glib libffi libfm libfm-qt menu-cache gettext-runtime icu kf5-extra-cmake-modules lxqt-build-tools kf5-ki18n kf5-plasma-framework kf5-ktexteditor qt5-testlib gmake autoconf zip bash nasm yasm autoconf213 llvm13 rust rust-cbindgen sndio node jackit libXres py38-sqlite3 v4l_compat binutils nss libvpx libnotify p5-Locale-gettext aom dav1d webp libpci ffmpeg libiconv openssl
     - curl -Lo /usr/share/mk/airyx.app.mk https://raw.githubusercontent.com/airyxos/airyx/main/share/mk/airyx.app.mk
     - curl -Lo /usr/share/mk/airyx.common.mk https://raw.githubusercontent.com/airyxos/airyx/main/share/mk/airyx.common.mk
     - curl -Lo /usr/share/mk/airyx.framework.mk https://raw.githubusercontent.com/airyxos/airyx/main/share/mk/airyx.framework.mk
+    - curl -Lo /tmp/airyx.txz https://dl.cloudsmith.io/public/airyx/13_0/raw/names/airyx_main.txz/files/airyx.txz
+    - tar xvf /tmp/airyx.txz -C /
+    - mv -f /usr/bin/ld.lld /usr/bin/ld
+    - curl -Lo /etc/make.conf https://raw.githubusercontent.com/mszoek/airyx/main/make.conf
     - make prep build
   only_if: $CIRRUS_BRANCH == 'main'
   app_artifacts:
