@@ -1,3 +1,32 @@
+--- browser/components/places/content/places.xhtml.orig	2021-12-18 20:35:12 UTC
++++ browser/components/places/content/places.xhtml
+@@ -163,7 +163,7 @@
+               onpopupshowing="document.getElementById('placeContent').focus()"
+               data-l10n-id="places-organize-button-mac"
+ #else
+-      <menubar id="placesMenu">
++      <menubar id="placesMenu" _moz-menubarkeeplocal="true">
+         <menu class="menu-iconic" data-l10n-id="places-organize-button"
+ #endif
+               id="organizeButton">
+--- browser/base/content/browser.js.orig	2021-12-18 20:46:11 UTC
++++ browser/base/content/browser.js
+@@ -6473,8 +6473,15 @@ function onViewToolbarsPopupShowing(aEvent, aInsertPoi
+   MozXULElement.insertFTLIfNeeded("browser/toolbarContextMenu.ftl");
+   let firstMenuItem = aInsertPoint || popup.firstElementChild;
+   let toolbarNodes = gNavToolbox.querySelectorAll("toolbar");
++
++  let shellShowingMenubar = document.documentElement.getAttribute("shellshowingmenubar") == "true";
++
+   for (let toolbar of toolbarNodes) {
+     if (!toolbar.hasAttribute("toolbarname")) {
++      continue;
++    }
++
++    if (shellShowingMenubar && toolbar.id == "toolbar-menubar") {
+       continue;
+     }
+
 --- browser/base/content/browser-menubar.inc
 +++ browser/base/content/browser-menubar.inc
 @@ -7,7 +7,12 @@
@@ -14,38 +43,6 @@
                                    this.setAttribute('openedwithkey',
                                                      event.target.parentNode.openedWithKey);"
  #endif
---- browser/base/content/browser.js
-+++ browser/base/content/browser.js
-@@ -6251,11 +6251,18 @@ function onViewToolbarsPopupShowing(aEve
-   MozXULElement.insertFTLIfNeeded("browser/toolbarContextMenu.ftl");
-   let firstMenuItem = aInsertPoint || popup.firstElementChild;
-   let toolbarNodes = gNavToolbox.querySelectorAll("toolbar");
-+
-+  let shellShowingMenubar = document.documentElement.getAttribute("shellshowingmenubar") == "true";
-+
-   for (let toolbar of toolbarNodes) {
-     if (!toolbar.hasAttribute("toolbarname")) {
-       continue;
-     }
- 
-+    if (shellShowingMenubar && toolbar.id == "toolbar-menubar") {
-+      continue;
-+    }
-+
-     if (toolbar.id == "PersonalToolbar" && gBookmarksToolbar2h2020) {
-       let menu = BookmarkingUI.buildBookmarksToolbarSubmenu(toolbar);
-       popup.insertBefore(menu, firstMenuItem);
---- browser/components/places/content/places.xhtml
-+++ browser/components/places/content/places.xhtml
-@@ -169,7 +169,7 @@
-         <toolbarbutton type="menu" class="tabbable" wantdropmarker="true"
-               onpopupshowing="document.getElementById('placeContent').focus()"
- #else
--      <menubar id="placesMenu">
-+      <menubar id="placesMenu" _moz-menubarkeeplocal="true">
-         <menu accesskey="&organize.accesskey;" class="menu-iconic"
- #endif
-               id="organizeButton" label="&organize.label;"
 --- dom/xul/XULPopupElement.cpp
 +++ dom/xul/XULPopupElement.cpp
 @@ -211,6 +211,10 @@ void XULPopupElement::GetState(nsString&
