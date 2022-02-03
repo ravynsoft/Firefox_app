@@ -13,6 +13,7 @@ SUDO= sudo
 build: clean all firefox install
 
 prep: /usr/ports/.git
+/usr/ports/.git:
 	${SUDO} mv -f /usr/ports /usr/ports.old
 	${SUDO} git clone -b airyx/2022Q1 https://github.com/airyxos/freebsd-ports.git /usr/ports
 
