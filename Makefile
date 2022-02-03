@@ -23,7 +23,7 @@ firefox:
 install:
 	cp -a /usr/ports/www/firefox/work/stage/* ./${APP_DIR}/Contents/Resources/
 	FOXVER=$$(grep ^DISTV /usr/ports/www/firefox/Makefile|cut -d= -f2|sed -e 's/[\t ]//g'); \
-	       sed -e "s/__version/${FOXVER}/g" < Info.plist > ${APP_DIR}/Contents/Info.plist
+	       sed -e "s/__version/$${FOXVER}/g" < Info.plist > ${APP_DIR}/Contents/Info.plist
 	tar -cJf ${APP_DIR}.txz ${APP_DIR}
 
 clean:
